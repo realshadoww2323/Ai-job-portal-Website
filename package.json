@@ -1,0 +1,18 @@
+{
+  "name": "ai-job-portal",
+  "version": "1.0.0",
+  "description": "AI-Powered Advanced Job Portal",
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:ai": "cd ai-service && .\\venv\\Scripts\\python -m uvicorn app.main:app --reload --port 8000",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:ai\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1",
+    "netlify-cli": "^26.0.2"
+  }
+}

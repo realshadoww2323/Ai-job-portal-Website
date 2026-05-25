@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme variable declarations */
+:root {
+  --font-display: 'Outfit', sans-serif;
+  --radius-card: 1.5rem;
+}
+
+/* Light Theme Variables */
+.theme-light {
+  --bg-primary: 248 250 252; /* slate-50 */
+  --bg-card: 255 255 255;
+  --text-main: 15 23 42; /* slate-900 */
+  --text-muted: 100 116 139; /* slate-500 */
+  --border-color: 241 245 249; /* slate-100 */
+  --primary-accent: 99 102 241; /* indigo-500 */
+  --secondary-accent: 6 182 212; /* cyan-500 */
+  --success-color: 16 185 129; /* emerald-500 */
+}
+
+/* Cyber Theme Variables (Futuristic Dark Neon) */
+.theme-cyber {
+  --bg-primary: 11 15 25; /* deep cyber black */
+  --bg-card: 22 29 48; /* glass slate */
+  --text-main: 241 245 249; /* light gray text */
+  --text-muted: 148 163 184; /* slate-400 */
+  --border-color: 30 41 59; /* slate-800 */
+  --primary-accent: 139 92 246; /* neon violet */
+  --secondary-accent: 6 182 212; /* electric cyan */
+  --success-color: 16 185 129; /* mint green */
+}
+
+/* Luxury Theme Variables (Obsidian & Metallic Gold) */
+.theme-luxury {
+  --bg-primary: 3 7 18; /* absolute black */
+  --bg-card: 17 24 39; /* dark metallic gray */
+  --text-main: 248 250 252;
+  --text-muted: 156 163 175;
+  --border-color: 31 41 55;
+  --primary-accent: 234 179 8; /* amber/gold */
+  --secondary-accent: 79 70 229; /* indigo */
+  --success-color: 16 185 129;
+}
+
+/* Earth Theme Variables (Terracotta & Oatmeal Forest) */
+.theme-earth {
+  --bg-primary: 250 249 246; /* alabaster */
+  --bg-card: 243 242 236; /* oatmeal sand */
+  --text-main: 27 36 33; /* forest charcoal */
+  --text-muted: 107 114 128;
+  --border-color: 229 231 235;
+  --primary-accent: 194 65 12; /* terracotta */
+  --secondary-accent: 13 148 136; /* warm teal */
+  --success-color: 16 185 129;
+}
+
+/* Global Styles using variables */
+body {
+  background-color: rgb(var(--bg-primary));
+  color: rgb(var(--text-main));
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  min-height: 100vh;
+}
+
+/* Premium Card Style Utility */
+.premium-card {
+  background-color: rgb(var(--bg-card));
+  border: 1px solid rgb(var(--border-color));
+  border-radius: var(--radius-card);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.15);
+}
+
+/* Dynamic theme borders & accent colors helper */
+.border-theme {
+  border-color: rgb(var(--border-color));
+}
+
+.text-theme-main {
+  color: rgb(var(--text-main));
+}
+
+.text-theme-muted {
+  color: rgb(var(--text-muted));
+}
+
+.bg-theme-card {
+  background-color: rgb(var(--bg-card));
+}
+
+/* Shimmer animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
