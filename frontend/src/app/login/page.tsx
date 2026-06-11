@@ -60,9 +60,9 @@ export default function Login() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 20a10.003 10.003 0 006.203-2.122l.054.09m-3.44 2.04C13.009 17.799 12 14.517 12 11V7a4 4 0 00-8 0v4M18 8a3 3 0 013 3v1" />
             </svg>
           </div>
-          <h2 className="text-center text-4xl font-black text-white tracking-tighter">
-            AI JobPortal
-          </h2>
+          <h1 className="text-4xl font-black text-white mb-2 tracking-tight text-center">
+            Future<span className="text-indigo-400">Steps</span>
+          </h1>
           <p className="mt-3 text-center text-sm text-indigo-100/70 font-medium">
             Sign in to your intelligent career workspace
           </p>

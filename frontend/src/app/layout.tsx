@@ -9,8 +9,8 @@ import Navbar from '../components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Job Portal | Advanced Career Platform',
-  description: 'AI-Powered Job Portal with Resume Analysis, Mock Interviews, and Career Assistant.',
+  title: 'Future Steps | Advanced Career Platform',
+  description: 'AI-powered job portal matching candidates with the perfect tech roles',
 }
 
 export default function RootLayout({

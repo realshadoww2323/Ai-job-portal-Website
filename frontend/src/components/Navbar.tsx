@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
-import { LogOut, Layout, Briefcase, BookOpen, Mic, Palette, Settings, HelpCircle, Phone, FileText, ChevronDown } from 'lucide-react';
+import { LogOut, Layout, Briefcase, BookOpen, Mic, Palette, Settings, HelpCircle, Phone, FileText, ChevronDown, Target, TrendingUp, Users, Zap } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -24,8 +24,13 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full bg-theme-card/85 backdrop-blur-md border-b border-theme-border py-4 px-8 flex justify-between items-center z-50 transition-all duration-300">
-      <Link href="/" className="text-2xl font-black tracking-tighter text-theme-text">
-        AI<span className="text-theme-accent">JobPortal</span>
+      <Link href="/" className="flex items-center gap-3 group">
+        <div className="bg-gradient-to-tr from-theme-accent to-theme-accent-sec text-white p-2.5 rounded-2xl shadow-lg shadow-theme-accent/20 group-hover:shadow-theme-accent/40 transition-all duration-300 transform group-hover:-translate-y-1 group-hover:rotate-3">
+          <Briefcase size={22} className="stroke-[2.5]" />
+        </div>
+        <span className="text-xl font-black tracking-tight text-theme-text flex items-center">
+        Future<span className="text-theme-accent">Steps</span>
+        </span>
       </Link>
 
       <div className="flex gap-6 items-center">
@@ -40,11 +45,26 @@ export default function Navbar() {
             <Link href="/dashboard" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
               <Layout size={16} /> Dashboard
             </Link>
+            
+            <Link href="/dashboard/career-trajectory" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
+              <TrendingUp size={16} /> Trajectory
+            </Link>
+
+            <Link href="/dashboard/career-pivot" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
+              <Target size={16} /> Career Pivot
+            </Link>
+            
             <Link href="/interview" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
               <Mic size={16} /> Mock Interview
             </Link>
             <Link href="/courses" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
               <BookOpen size={16} /> Courses
+            </Link>
+            <Link href="/mentorship" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
+              <Users size={16} /> Mentors
+            </Link>
+            <Link href="/freelance" className="text-sm font-bold text-theme-text-muted hover:text-theme-accent transition flex items-center gap-1">
+              <Zap size={16} /> Gigs
             </Link>
           </>
         )}

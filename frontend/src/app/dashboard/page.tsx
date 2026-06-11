@@ -252,8 +252,8 @@ export default function Dashboard() {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="flex flex-col gap-2">
-          <h1 className="text-4xl font-black text-theme-text tracking-tight">AI Resume Dashboard</h1>
-          <p className="text-theme-text-muted font-medium">Analyze your skills and boost your ATS score.</p>
+          <h1 className="text-4xl font-black text-theme-text tracking-tight">FutureSteps Career Hub</h1>
+          <p className="text-theme-text-muted font-medium">Align your resume with your dream role, maximize your ATS score, and land your next job.</p>
         </motion.div>
 
         {error && (
@@ -407,6 +407,53 @@ export default function Dashboard() {
                         <p className="text-theme-success font-bold flex items-center justify-center gap-2">
                           <CheckCircle size={20} /> Profile Fully Optimized!
                         </p>
+                      </div>
+                    )}
+
+                    {/* Job and Internship Links Section */}
+                    {(matchResult.job_links?.length > 0 || matchResult.internship_links?.length > 0) && (
+                      <div className="mt-6 border-t border-theme-border pt-6 space-y-4">
+                        <h3 className="font-bold text-lg text-theme-text flex items-center gap-2">
+                          <Briefcase size={20} className="text-theme-accent" /> Recommended Applications
+                        </h3>
+                        
+                        {matchResult.job_links?.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Suitable Job Openings:</p>
+                            {matchResult.job_links.map((job: any, i: number) => (
+                              <a key={i} href={job.url} target="_blank" rel="noopener noreferrer" className="block bg-theme-bg/60 p-3 rounded-xl border border-theme-border hover:border-theme-accent transition group flex justify-between items-center">
+                                <div className="flex flex-col">
+                                  <span className="font-medium text-theme-text text-sm">{job.title}</span>
+                                  {job.match_percent && (
+                                    <span className="text-xs font-bold text-theme-success mt-1">
+                                      {job.match_percent}% match for this job
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-xs text-theme-accent font-bold group-hover:underline">Apply Now &rarr;</span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+
+                        {matchResult.is_fresher && matchResult.internship_links?.length > 0 && (
+                          <div className="space-y-2 pt-2">
+                            <p className="text-xs font-bold text-theme-text-muted uppercase tracking-wider">Fresher / Internship Opportunities:</p>
+                            {matchResult.internship_links.map((internship: any, i: number) => (
+                              <a key={i} href={internship.url} target="_blank" rel="noopener noreferrer" className="block bg-theme-accent-sec/10 p-3 rounded-xl border border-theme-accent-sec/30 hover:border-theme-accent-sec transition group flex justify-between items-center">
+                                <div className="flex flex-col">
+                                  <span className="font-medium text-theme-text text-sm">{internship.title}</span>
+                                  {internship.match_percent && (
+                                    <span className="text-xs font-bold text-theme-success mt-1">
+                                      {internship.match_percent}% match for this role
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-xs text-theme-accent-sec font-bold group-hover:underline">Apply Now &rarr;</span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

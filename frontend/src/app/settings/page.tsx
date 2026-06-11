@@ -201,7 +201,7 @@ export default function SettingsPage() {
                   </h2>
                   <div className="space-y-4 text-theme-text-muted text-sm leading-relaxed">
                     <p>
-                      Welcome to the AI Job Portal help center. Here you can find answers to frequently asked questions
+                      Welcome to the Future Steps help center. Here you can find answers to frequently asked questions
                       and learn how to make the most out of our advanced career platform.
                     </p>
                     <div className="bg-theme-bg p-6 rounded-2xl border border-theme-border mt-4">
@@ -228,7 +228,7 @@ export default function SettingsPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-theme-bg border border-theme-border p-5 rounded-2xl">
                         <p className="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Email Support</p>
-                        <p className="text-theme-text font-bold">support@aijobportal.com</p>
+                        <p className="text-theme-text font-bold">support@futuresteps.com</p>
                       </div>
                       <div className="bg-theme-bg border border-theme-border p-5 rounded-2xl">
                         <p className="text-xs font-bold text-theme-text-muted uppercase tracking-wider mb-1">Phone Support</p>
@@ -247,13 +247,13 @@ export default function SettingsPage() {
               )}
 
               {activeTab === 'terms' && (
-                <div>
+                <div className="space-y-6 text-sm text-theme-text-muted">
                   <h2 className="text-2xl font-black text-theme-text mb-6 flex items-center gap-2">
                     <FileText className="text-theme-text-muted" /> Terms & Conditions
                   </h2>
                   <div className="space-y-6 text-sm text-theme-text-muted leading-relaxed max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                     <p>
-                      <strong>1. Acceptance of Terms:</strong> By accessing and using the AI Job Portal, you agree to be bound by these Terms and Conditions.
+                      <strong>1. Acceptance of Terms:</strong> By accessing and using Future Steps, you agree to be bound by these Terms and Conditions.
                     </p>
                     <p>
                       <strong>2. User Accounts:</strong> You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.

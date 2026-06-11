@@ -12,13 +12,23 @@ export default function CourseLearnPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [moduleAnswers, setModuleAnswers] = useState<Record<number, Record<number, string>>>({});
+  const [moduleTaskAnswers, setModuleTaskAnswers] = useState<Record<number, string>>({});
+  const [completedModules, setCompletedModules] = useState<number[]>([]);
   const [showCertificate, setShowCertificate] = useState(false);
   const [candidateName, setCandidateName] = useState('');
   const [candidateEmail, setCandidateEmail] = useState('');
   const [certificateGenerated, setCertificateGenerated] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  const isCourseComplete = course?.modules && course.modules.length > 0 && 
+    course.modules.every((_: any, idx: number) => completedModules.includes(idx));
+
+  const activeModule = course?.modules && course.modules[activeModuleIndex];
+  const quizAnswers = moduleAnswers[activeModuleIndex] || {};
+  const taskAnswer = moduleTaskAnswers[activeModuleIndex] || '';
+  const taskWordsCount = taskAnswer.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const quizSubmitted = completedModules.includes(activeModuleIndex);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -42,15 +52,21 @@ export default function CourseLearnPage() {
     return <div className="min-h-screen flex items-center justify-center bg-slate-50">Course not found.</div>;
   }
 
-  const activeModule = course.modules && course.modules[activeModuleIndex];
-
   const handleAnswerSelect = (questionIndex: number, option: string) => {
     if (quizSubmitted) return;
-    setQuizAnswers(prev => ({ ...prev, [questionIndex]: option }));
+    setModuleAnswers(prev => ({
+      ...prev,
+      [activeModuleIndex]: {
+        ...(prev[activeModuleIndex] || {}),
+        [questionIndex]: option
+      }
+    }));
   };
 
   const handleQuizSubmit = () => {
-    setQuizSubmitted(true);
+    if (!completedModules.includes(activeModuleIndex)) {
+      setCompletedModules(prev => [...prev, activeModuleIndex]);
+    }
   };
 
   const calculateScore = () => {
@@ -107,12 +123,12 @@ export default function CourseLearnPage() {
               onClick={() => {
                 setShowCertificate(false);
                 setActiveModuleIndex(idx);
-                setQuizAnswers({});
-                setQuizSubmitted(false);
               }}
               className={`w-full text-left px-6 py-4 flex items-start gap-3 transition-colors ${(!showCertificate && activeModuleIndex === idx) ? 'bg-indigo-50 border-r-4 border-indigo-600' : 'hover:bg-slate-50 border-r-4 border-transparent'}`}
             >
-              {(!showCertificate && activeModuleIndex === idx) ? (
+              {completedModules.includes(idx) ? (
+                <CheckCircle2 size={20} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+              ) : (!showCertificate && activeModuleIndex === idx) ? (
                 <PlayCircle size={20} className="text-indigo-600 mt-0.5 flex-shrink-0" />
               ) : (
                 <Circle size={20} className="text-slate-300 mt-0.5 flex-shrink-0" />
@@ -135,11 +151,13 @@ export default function CourseLearnPage() {
           {course.modules && course.modules.length > 0 && (
             <div className="mt-8 border-t border-slate-100 pt-4">
               <button
+                disabled={!isCourseComplete}
                 onClick={() => {
                   setShowCertificate(true);
                   setActiveModuleIndex(-1);
                 }}
-                className={`w-full text-left px-6 py-4 flex items-center gap-3 transition-colors ${showCertificate ? 'bg-amber-50 border-r-4 border-amber-500' : 'hover:bg-slate-50 border-r-4 border-transparent'}`}
+                className={`w-full text-left px-6 py-4 flex items-center gap-3 transition-colors ${showCertificate ? 'bg-amber-50 border-r-4 border-amber-500' : 'hover:bg-slate-50 border-r-4 border-transparent'} ${!isCourseComplete ? 'opacity-50 cursor-not-allowed' : ''}`}
+                title={!isCourseComplete ? "Complete all assignments to unlock your certificate" : "Claim your certificate"}
               >
                 <div className="bg-amber-100 text-amber-600 p-2 rounded-xl flex-shrink-0">
                   <Award size={20} />
@@ -149,7 +167,7 @@ export default function CourseLearnPage() {
                     Claim Certificate
                   </span>
                   <span className="text-xs font-medium text-slate-500 mt-1 block">
-                    Final Step
+                    {isCourseComplete ? "Final Step" : "Locked (Complete all modules)"}
                   </span>
                 </div>
               </button>
@@ -180,7 +198,7 @@ export default function CourseLearnPage() {
                       value={candidateName}
                       onChange={(e) => setCandidateName(e.target.value)}
                       placeholder="e.g. Jane Doe"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition text-slate-900"
                     />
                   </div>
                   <div>
@@ -190,7 +208,7 @@ export default function CourseLearnPage() {
                       value={candidateEmail}
                       onChange={(e) => setCandidateEmail(e.target.value)}
                       placeholder="e.g. jane@example.com"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition text-slate-900"
                     />
                   </div>
                   <button 
@@ -248,7 +266,7 @@ export default function CourseLearnPage() {
                     <div className="flex justify-between w-full max-w-2xl mt-8 px-8">
                       <div className="text-center">
                         <div className="border-b-2 border-slate-800 w-48 mb-2 pb-2">
-                          <span className="font-serif italic text-2xl text-slate-800">AI Job Portal</span>
+                          <span className="font-serif italic text-2xl text-slate-800">Future Steps</span>
                         </div>
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Platform</p>
                       </div>
@@ -346,16 +364,68 @@ export default function CourseLearnPage() {
                   ) : (
                     <div></div>
                   )}
-                  <button
-                    onClick={handleQuizSubmit}
-                    disabled={quizSubmitted || Object.keys(quizAnswers).length !== activeModule.questions.length}
-                    className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition disabled:opacity-50 disabled:hover:bg-indigo-600 disabled:cursor-not-allowed"
-                  >
-                    {quizSubmitted ? 'Quiz Submitted' : 'Submit Answers'}
-                  </button>
                 </div>
               </section>
             )}
+
+            {/* Written Task Section */}
+            <section className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
+              <div className="flex items-center gap-3 border-b border-slate-100 pb-6">
+                <div className="bg-purple-100 text-purple-600 p-3 rounded-2xl">
+                  <Hexagon size={24} />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900">Module Task</h2>
+                  <p className="text-slate-500 font-medium">Complete the written assignment below.</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-slate-800">
+                  {activeModule.task?.question || `Write a short reflection on what you have learned about ${activeModule?.title || 'this topic'} and how you plan to apply it.`} <span className="text-indigo-600 ml-1">[Max 200 words]</span>
+                </h3>
+                <textarea
+                  value={taskAnswer}
+                  onChange={(e) => {
+                    if (quizSubmitted) return;
+                    setModuleTaskAnswers(prev => ({ ...prev, [activeModuleIndex]: e.target.value }));
+                  }}
+                  disabled={quizSubmitted}
+                  placeholder="Write your answer here..."
+                  className={`w-full h-40 p-4 rounded-xl border-2 transition text-slate-900 outline-none resize-none
+                    ${quizSubmitted ? 'bg-slate-50 border-slate-200 text-slate-600' : 'border-slate-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600'}
+                    ${taskWordsCount > 200 ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
+                />
+                <div className="flex justify-between items-center text-sm font-medium">
+                  <span className={taskWordsCount > 200 ? 'text-red-500 font-bold' : 'text-slate-500'}>
+                    Words: {taskWordsCount} / 200
+                  </span>
+                  {taskWordsCount > 200 && <span className="text-red-500">Exceeds word limit</span>}
+                </div>
+              </div>
+            </section>
+
+            {/* Submit Module CTA */}
+            <div className="pt-2 flex items-center justify-between bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+              {quizSubmitted ? (
+                <div className="text-lg font-bold text-slate-800 bg-emerald-50 text-emerald-700 px-6 py-3 rounded-2xl border border-emerald-200 flex items-center gap-2">
+                  <CheckCircle2 size={20} /> Module Completed
+                </div>
+              ) : (
+                <div className="text-slate-500 font-medium">Complete all assignments to submit</div>
+              )}
+              <button
+                onClick={handleQuizSubmit}
+                disabled={
+                  quizSubmitted || 
+                  (activeModule.questions?.length > 0 && Object.keys(quizAnswers).length !== activeModule.questions.length) ||
+                  (activeModule.task && (taskWordsCount === 0 || taskWordsCount > 200))
+                }
+                className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition disabled:opacity-50 disabled:hover:bg-indigo-600 disabled:cursor-not-allowed"
+              >
+                {quizSubmitted ? 'Completed' : 'Submit Module'}
+              </button>
+            </div>
 
             {/* Next Module CTA */}
             {activeModuleIndex < (course.modules?.length || 0) - 1 && (
@@ -367,8 +437,6 @@ export default function CourseLearnPage() {
                 <button 
                   onClick={() => {
                     setActiveModuleIndex(prev => prev + 1);
-                    setQuizAnswers({});
-                    setQuizSubmitted(false);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-lg hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-200"

@@ -9,7 +9,10 @@ const questionSchema = new mongoose.Schema({
 const moduleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   videoUrl: { type: String },
-  questions: [questionSchema]
+  questions: [questionSchema],
+  task: {
+    question: { type: String }
+  }
 });
 
 const courseSchema = new mongoose.Schema({

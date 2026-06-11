@@ -36,7 +36,58 @@ const userSchema = new mongoose.Schema({
     attended: { type: Boolean, default: false },
     lastAttendedAt: { type: Date },
     score: { type: Number }
-  }
+  },
+  
+  // Advanced AI Features Storage
+  careerTwin: {
+    readinessScore: Number,
+    topRoles: [String],
+    hiringProbability: Number,
+    expectedSalary: String,
+    roadmap: {
+      oneYear: String,
+      threeYears: String,
+      fiveYears: String
+    },
+    lastGeneratedAt: Date
+  },
+  interviewPredictions: {
+    technicalRoundSuccess: Number,
+    hrRoundSuccess: Number,
+    overallProbability: Number,
+    strengths: [String],
+    weaknesses: [String],
+    recommendations: [String],
+    lastPredictedAt: Date
+  },
+  cultureMatches: [{
+    companyName: String,
+    cultureMatchScore: Number,
+    startupFitScore: Number,
+    corporateFitScore: Number,
+    remoteCompatibility: Number,
+    explanation: String,
+    matchedAt: { type: Date, default: Date.now }
+  }],
+  elevatorPitch: {
+    content: String,
+    mode: String,
+    generatedAt: Date
+  },
+  careerPivots: [{
+    targetRole: String,
+    transferableSkills: [{
+      old_skill: String,
+      new_skill: String,
+      relevance: String
+    }],
+    bridgePlan: [{
+      week: String,
+      task: String
+    }],
+    rewrittenSummary: String,
+    createdAt: { type: Date, default: Date.now }
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,0 +1,249 @@
+[debug] [2026-05-25T19:06:10.446Z] ----------------------------------------------------------------------
+[debug] [2026-05-25T19:06:10.451Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\aravi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --project ai-job-portal-f3bee
+[debug] [2026-05-25T19:06:10.452Z] CLI Version:   15.18.0
+[debug] [2026-05-25T19:06:10.452Z] Platform:      win32
+[debug] [2026-05-25T19:06:10.452Z] Node Version:  v24.13.1
+[debug] [2026-05-25T19:06:10.452Z] Time:          Tue May 26 2026 00:36:10 GMT+0530 (India Standard Time)
+[debug] [2026-05-25T19:06:10.452Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-25T19:06:13.212Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-25T19:06:13.212Z] > authorizing via signed-in user (aravindakshay32@gmail.com)
+[debug] [2026-05-25T19:06:13.212Z] [iam] checking project ai-job-portal-f3bee for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-25T19:06:13.214Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:13.214Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:13.215Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions [none]
+[debug] [2026-05-25T19:06:13.216Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions  x-goog-user-project=ai-job-portal-f3bee
+[debug] [2026-05-25T19:06:13.216Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-25T19:06:14.553Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions 200
+[debug] [2026-05-25T19:06:14.553Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-25T19:06:14.554Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:14.554Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:14.554Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ai-job-portal-f3bee [none]
+[debug] [2026-05-25T19:06:14.982Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ai-job-portal-f3bee 200
+[debug] [2026-05-25T19:06:14.983Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ai-job-portal-f3bee {"projectId":"ai-job-portal-f3bee","projectNumber":"893672366338","displayName":"ai job portal","name":"projects/ai-job-portal-f3bee","resources":{"hostingSite":"ai-job-portal-f3bee"},"state":"ACTIVE","etag":"1_307dbabb-7798-4ccb-a68d-f5d608bbc21f"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-05-25T19:06:29.717Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:29.717Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:06:29.717Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee [none]
+[debug] [2026-05-25T19:06:31.195Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee 200
+[debug] [2026-05-25T19:06:31.195Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee {"name":"projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee","defaultUrl":"https://ai-job-portal-f3bee.web.app","type":"DEFAULT_SITE"}
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully
+
+[info]    Linting and checking validity of types ...
+
+[info]    Collecting page data ...
+
+[info]    Generating static pages (0/15) ...
+
+[info]    Generating static pages (3/15) 
+
+[info] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+
+[info]    Generating static pages (7/15) 
+
+[info]  ⚠ Entire page /manual-apply deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /manual-apply
+
+[info]    Generating static pages (11/15) 
+
+[info]  ⚠ Entire page /settings deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /settings
+
+[info] The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+
+[info]  ✓ Generating static pages (15/15) 
+
+[info]    Finalizing page optimization ...
+
+[info]    Collecting build traces ...
+
+[info] 
+
+[info] Route (app)                              Size     First Load JS
+┌ ○ /                                    3.39 kB         127 kB
+├ ○ /_not-found                          880 B          81.8 kB
+├ ○ /admin/dashboard                     12.4 kB         232 kB
+├ λ /api/chat                            0 B                0 B
+├ ○ /courses                             5.37 kB         145 kB
+├ λ /courses/[id]/learn                  5.36 kB         110 kB
+├ ○ /dashboard                           4.57 kB         279 kB
+├ ○ /interview                           12.1 kB         128 kB
+├ ○ /jobs                                10.1 kB         292 kB
+├ ○ /login                               2.97 kB         115 kB
+├ ○ /manual-apply                        2.36 kB         118 kB
+├ ○ /recruiter/dashboard                 11.6 kB         231 kB
+├ ○ /register                            2.48 kB         114 kB
+└ ○ /settings                            5.82 kB         122 kB
++ First Load JS shared by all            80.9 kB
+  ├ chunks/472-3bdf48f1f88cc702.js       27.6 kB
+  ├ chunks/fd9d1056-ea666f9f398a5270.js  51.1 kB
+  ├ chunks/main-app-64a0a40d73a48dda.js  235 B
+  └ chunks/webpack-dba8e390d217de1f.js   2 kB
+
+
+[info] 
+λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • non-static component /api/chat/route
+[info]  • non-static component /courses/[id]/learn/page
+[info] 
+[debug] [2026-05-25T19:07:27.854Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:07:27.854Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:07:27.854Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee [none]
+[debug] [2026-05-25T19:07:28.886Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee 200
+[debug] [2026-05-25T19:07:28.886Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee {"name":"projects/ai-job-portal-f3bee/sites/ai-job-portal-f3bee","defaultUrl":"https://ai-job-portal-f3bee.web.app","type":"DEFAULT_SITE"}
+[debug] [2026-05-25T19:08:58.373Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": "frontend",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "ai-job-portal-f3bee",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssraijobportalf3bee",
+            "region": "us-central1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "/admin/dashboard",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/dashboard/layout,_N_T_/admin/dashboard/page,_N_T_/admin/dashboard"
+            }
+          ]
+        },
+        {
+          "source": "/courses",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/courses/layout,_N_T_/courses/page,_N_T_/courses"
+            }
+          ]
+        },
+        {
+          "source": "/dashboard",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/dashboard/layout,_N_T_/dashboard/page,_N_T_/dashboard"
+            }
+          ]
+        },
+        {
+          "source": "/interview",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/interview/layout,_N_T_/interview/page,_N_T_/interview"
+            }
+          ]
+        },
+        {
+          "source": "/login",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/login/layout,_N_T_/login/page,_N_T_/login"
+            }
+          ]
+        },
+        {
+          "source": "/jobs",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/jobs/layout,_N_T_/jobs/page,_N_T_/jobs"
+            }
+          ]
+        },
+        {
+          "source": "/manual-apply",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/manual-apply/layout,_N_T_/manual-apply/page,_N_T_/manual-apply"
+            }
+          ]
+        },
+        {
+          "source": "/recruiter/dashboard",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/recruiter/layout,_N_T_/recruiter/dashboard/layout,_N_T_/recruiter/dashboard/page,_N_T_/recruiter/dashboard"
+            }
+          ]
+        },
+        {
+          "source": "/register",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/register/layout,_N_T_/register/page,_N_T_/register"
+            }
+          ]
+        },
+        {
+          "source": "/settings",
+          "headers": [
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/settings/layout,_N_T_/settings/page,_N_T_/settings"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "public": ".firebase\\ai-job-portal-f3bee\\hosting",
+      "webFramework": "next_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": ".firebase\\ai-job-portal-f3bee\\functions",
+      "codebase": "firebase-frameworks-ai-job-portal-f3bee"
+    }
+  ]
+}
+[debug] [2026-05-25T19:08:58.374Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-25T19:08:58.374Z] > authorizing via signed-in user (aravindakshay32@gmail.com)
+[debug] [2026-05-25T19:08:58.375Z] [iam] checking project ai-job-portal-f3bee for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-05-25T19:08:58.375Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:08:58.375Z] Checked if tokens are valid: true, expires at: 1779738420605
+[debug] [2026-05-25T19:08:58.376Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions [none]
+[debug] [2026-05-25T19:08:58.376Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions  x-goog-user-project=ai-job-portal-f3bee
+[debug] [2026-05-25T19:08:58.376Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-job-portal-f3bee:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}

@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Briefcase, Zap, ShieldCheck, TrendingUp, Globe, ArrowRight } from 'lucide-react';
+import { Search, MapPin, Briefcase, Zap, ShieldCheck, TrendingUp, Globe, ArrowRight, Mail } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -203,6 +203,22 @@ export default function LandingPage() {
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-theme-accent/10 via-transparent to-transparent opacity-50 pointer-events-none" />
         </div>
       </section>
+
+      {/* Footer / Support Section */}
+      <footer className="py-12 border-t border-theme-border bg-theme-bg text-center">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col items-center justify-center gap-6">
+          <div className="flex items-center gap-3 bg-theme-card px-6 py-3 rounded-full border border-theme-border shadow-sm">
+            <Mail className="text-theme-accent" size={20} />
+            <span className="text-theme-text font-medium">Need help or have questions?</span>
+            <a href="mailto:support@yourdomain.com" className="text-theme-accent font-bold hover:underline transition-all">
+              Contact Support
+            </a>
+          </div>
+          <p className="text-theme-text-muted text-sm font-medium">
+            &copy; {new Date().getFullYear()} Next Gen Job Portal. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
