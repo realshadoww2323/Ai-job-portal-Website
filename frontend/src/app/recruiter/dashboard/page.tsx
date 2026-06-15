@@ -1,19 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Briefcase, FileCheck, TrendingUp, Plus, Search, Filter } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-
-const data = [
-  { name: 'Mon', apps: 12, jobs: 2 },
-  { name: 'Tue', apps: 19, jobs: 1 },
-  { name: 'Wed', apps: 15, jobs: 3 },
-  { name: 'Thu', apps: 22, jobs: 2 },
-  { name: 'Fri', apps: 30, jobs: 4 },
-  { name: 'Sat', apps: 10, jobs: 1 },
-  { name: 'Sun', apps: 8, jobs: 0 },
-];
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
+import Link from 'next/link';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,6 +25,80 @@ const itemVariants = {
 };
 
 export default function RecruiterDashboard() {
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        
+        // Usually Next.js rewrites to backend, but we'll use API_URL env if available
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        
+        const [jobsRes, appsRes] = await Promise.all([
+          axios.get(`${API_BASE}/jobs/me`, { headers }),
+          axios.get(`${API_BASE}/applications/recruiter`, { headers })
+        ]);
+        
+        setJobs(jobsRes.data);
+        setApplications(appsRes.data);
+      } catch (err) {
+        console.error('Failed to fetch recruiter dashboard data', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+
+  const activeJobsCount = jobs.filter(j => j.status === 'active').length;
+  const totalApplications = applications.length;
+  const shortlistedCount = applications.filter(a => a.status === 'shortlisted').length;
+  const interviewedCount = applications.filter(a => a.status === 'interviewed').length;
+
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const trendsMap: Record<string, number> = { Mon:0, Tue:0, Wed:0, Thu:0, Fri:0, Sat:0, Sun:0 };
+  applications.forEach(app => {
+    const date = new Date(app.createdAt || Date.now());
+    const dayName = days[date.getDay()];
+    trendsMap[dayName]++;
+  });
+  
+  const chartData = [
+    { name: 'Mon', apps: trendsMap['Mon'] },
+    { name: 'Tue', apps: trendsMap['Tue'] },
+    { name: 'Wed', apps: trendsMap['Wed'] },
+    { name: 'Thu', apps: trendsMap['Thu'] },
+    { name: 'Fri', apps: trendsMap['Fri'] },
+    { name: 'Sat', apps: trendsMap['Sat'] },
+    { name: 'Sun', apps: trendsMap['Sun'] },
+  ];
+
+  const recentApplications = [...applications]
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+    .slice(0, 4);
+
+  const getRelativeTime = (dateStr: string) => {
+    if (!dateStr) return 'Just now';
+    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    const diff = new Date().getTime() - new Date(dateStr).getTime();
+    const hours = Math.round(diff / (1000 * 60 * 60));
+    if (hours < 24) return rtf.format(-hours, 'hour');
+    return rtf.format(-Math.round(hours / 24), 'day');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <p className="font-bold text-slate-500 animate-pulse">Loading Dashboard...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 pt-24 px-6 pb-12">
       <motion.div 
@@ -47,18 +113,18 @@ export default function RecruiterDashboard() {
             <h1 className="text-4xl font-black text-slate-900 tracking-tight">Recruiter Dashboard</h1>
             <p className="text-slate-500 font-medium mt-1">Manage your job postings and track candidate applications.</p>
           </div>
-          <button className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2 shadow-lg">
+          <Link href="/recruiter/post-job" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2 shadow-lg">
             <Plus size={20} /> Post a New Job
-          </button>
+          </Link>
         </motion.div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { label: 'Active Jobs', value: '12', icon: Briefcase, color: 'text-blue-500', bg: 'bg-blue-50' },
-            { label: 'Total Applications', value: '846', icon: Users, color: 'text-indigo-500', bg: 'bg-indigo-50' },
-            { label: 'Shortlisted', value: '42', icon: FileCheck, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-            { label: 'Interviewed', value: '18', icon: TrendingUp, color: 'text-orange-500', bg: 'bg-orange-50' },
+            { label: 'Active Jobs', value: activeJobsCount, icon: Briefcase, color: 'text-blue-500', bg: 'bg-blue-50' },
+            { label: 'Total Applications', value: totalApplications, icon: Users, color: 'text-indigo-500', bg: 'bg-indigo-50' },
+            { label: 'Shortlisted', value: shortlistedCount, icon: FileCheck, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+            { label: 'Interviewed', value: interviewedCount, icon: TrendingUp, color: 'text-orange-500', bg: 'bg-orange-50' },
           ].map((stat, i) => (
             <motion.div 
               key={i} 
@@ -87,7 +153,7 @@ export default function RecruiterDashboard() {
             </h2>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data}>
+                <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
@@ -104,28 +170,27 @@ export default function RecruiterDashboard() {
           {/* Quick Actions / Recent activity */}
           <motion.div variants={itemVariants} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
             <h2 className="text-xl font-bold text-slate-800 mb-6">Recent Applications</h2>
-            <div className="space-y-6">
-              {[
-                { name: 'Rahul Sharma', role: 'Full Stack Developer', match: '94%', time: '2h ago' },
-                { name: 'Priya Patel', role: 'UX Designer', match: '88%', time: '5h ago' },
-                { name: 'Anish Kumar', role: 'DevOps Engineer', match: '76%', time: '1d ago' },
-                { name: 'Sneha Reddy', role: 'Frontend Developer', match: '92%', time: '1d ago' },
-              ].map((app, i) => (
-                <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                  <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition">
-                    {app.name[0]}
+            {recentApplications.length === 0 ? (
+              <p className="text-sm text-slate-500 text-center py-8">No applications yet.</p>
+            ) : (
+              <div className="space-y-6">
+                {recentApplications.map((app, i) => (
+                  <div key={i} className="flex items-center gap-4 group cursor-pointer">
+                    <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition">
+                      {app.applicantId?.name?.[0] || 'U'}
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                      <p className="text-sm font-bold text-slate-800 truncate">{app.applicantId?.name || 'Unknown User'}</p>
+                      <p className="text-xs text-slate-500 truncate">{app.jobId?.title || 'Unknown Job'}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-xs font-black text-emerald-500">{app.aiMatchScore ? `${app.aiMatchScore}%` : 'N/A'}</p>
+                      <p className="text-[10px] text-slate-400">{getRelativeTime(app.createdAt)}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-slate-800">{app.name}</p>
-                    <p className="text-xs text-slate-500">{app.role}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs font-black text-emerald-500">{app.match}</p>
-                    <p className="text-[10px] text-slate-400">{app.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
             <button className="w-full mt-8 py-3 text-sm font-bold text-indigo-600 hover:bg-indigo-50 rounded-xl transition">
               View All Applications
             </button>
@@ -162,33 +227,45 @@ export default function RecruiterDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {[
-                  { title: 'Senior Software Engineer', location: 'Bangalore', apps: 124, status: 'Active', date: 'Oct 12, 2023' },
-                  { title: 'Product Manager', location: 'Remote', apps: 56, status: 'Active', date: 'Oct 15, 2023' },
-                  { title: 'Lead Designer', location: 'Mumbai', apps: 89, status: 'Active', date: 'Oct 18, 2023' },
-                ].map((job, i) => (
-                  <tr key={i} className="hover:bg-slate-50/50 transition">
-                    <td className="px-8 py-6">
-                      <p className="font-bold text-slate-800">{job.title}</p>
-                      <p className="text-xs text-slate-500 mt-1">{job.location}</p>
-                    </td>
-                    <td className="px-8 py-6">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-800">{job.apps}</span>
-                        <span className="text-xs text-slate-400">Applications</span>
-                      </div>
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">
-                        {job.status}
-                      </span>
-                    </td>
-                    <td className="px-8 py-6 text-sm text-slate-500">{job.date}</td>
-                    <td className="px-8 py-6 text-right">
-                      <button className="text-indigo-600 font-bold text-sm hover:underline">View Details</button>
+                {jobs.map((job, i) => {
+                  const jobAppsCount = applications.filter(a => a.jobId === job._id || a.jobId?._id === job._id || a.jobId?.id === job.id || a.jobId === job.id).length;
+                  return (
+                    <tr key={job._id || job.id || i} className="hover:bg-slate-50/50 transition">
+                      <td className="px-8 py-6">
+                        <p className="font-bold text-slate-800">{job.title}</p>
+                        <p className="text-xs text-slate-500 mt-1">{job.location || 'Remote'}</p>
+                      </td>
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-800">{jobAppsCount}</span>
+                          <span className="text-xs text-slate-400">Applications</span>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${
+                          job.status === 'active' 
+                            ? 'bg-emerald-50 text-emerald-600' 
+                            : 'bg-slate-100 text-slate-500'
+                        }`}>
+                          {job.status || 'Active'}
+                        </span>
+                      </td>
+                      <td className="px-8 py-6 text-sm text-slate-500">
+                        {new Date(job.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </td>
+                      <td className="px-8 py-6 text-right">
+                        <button className="text-indigo-600 font-bold text-sm hover:underline">View Details</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {jobs.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-8 py-8 text-center text-slate-500 text-sm">
+                      No active job postings found.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

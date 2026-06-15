@@ -63,6 +63,45 @@ router.post('/apply/:jobId', auth, upload.single('resume'), async (req, res) => 
   }
 });
 
+// GET all applications for jobs posted by the logged-in recruiter
+router.get('/recruiter', auth, async (req, res) => {
+  try {
+    if (global.useMockDb) {
+      // Find all jobs for this recruiter
+      const myJobs = mockStore.jobs.filter(j => j.recruiterId === req.user.id || !j.recruiterId);
+      const myJobIds = myJobs.map(j => j.id || j._id);
+      
+      // Find applications for these jobs
+      const myApplications = mockStore.applications.filter(app => myJobIds.includes(app.jobId));
+      
+      // We might need to attach some basic user info and job info for mock
+      const enrichedApps = myApplications.map(app => {
+        const job = mockStore.jobs.find(j => (j.id || j._id) === app.jobId);
+        const applicant = mockStore.users.find(u => (u.id || u._id) === app.applicantId);
+        return {
+          ...app,
+          jobId: job ? { _id: job.id || job._id, title: job.title, location: job.location, status: job.status, createdAt: job.createdAt } : app.jobId,
+          applicantId: applicant ? { _id: applicant.id || applicant._id, name: applicant.name, email: applicant.email, profile: applicant.profile } : app.applicantId
+        };
+      });
+      return res.json(enrichedApps);
+    }
+
+    // Mongo DB Flow
+    const myJobs = await Job.find({ recruiterId: req.user.id }, '_id title location status createdAt');
+    const myJobIds = myJobs.map(j => j._id);
+    
+    const applications = await Application.find({ jobId: { $in: myJobIds } })
+      .populate('applicantId', 'name email profile')
+      .populate('jobId', 'title location status createdAt')
+      .sort({ createdAt: -1 });
+      
+    res.json(applications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET applications for a specific job (Recruiter view)
 router.get('/job/:jobId', async (req, res) => {
   try {

@@ -2,12 +2,27 @@ const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
 const { mockStore } = require('../utils/mockDb');
+const auth = require('../middleware/auth');
 
 // GET all jobs
 router.get('/', async (req, res) => {
   try {
     if (global.useMockDb) return res.json(mockStore.jobs);
     const jobs = await Job.find().sort({ createdAt: -1 }).populate('recruiterId', 'name companyName');
+    res.json(jobs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET jobs posted by the logged-in recruiter
+router.get('/me', auth, async (req, res) => {
+  try {
+    if (global.useMockDb) {
+      const myJobs = mockStore.jobs.filter(j => j.recruiterId === req.user.id || !j.recruiterId);
+      return res.json(myJobs);
+    }
+    const jobs = await Job.find({ recruiterId: req.user.id }).sort({ createdAt: -1 });
     res.json(jobs);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -25,7 +40,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-const auth = require('../middleware/auth');
 
 // POST create job
 router.post('/', auth, async (req, res) => {

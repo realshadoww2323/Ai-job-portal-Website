@@ -4,74 +4,47 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Star, Clock, Calendar, CheckCircle, Search, Video, X } from 'lucide-react';
 
-const MOCK_MENTORS = [
-  {
-    id: 'm1',
-    name: 'Sarah Jenkins',
-    role: 'Senior Staff Engineer',
-    company: 'Google',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    rating: 4.9,
-    reviews: 124,
-    skills: ['System Design', 'React', 'Career Advice'],
-    availability: 'Next available: Tomorrow',
-    price: 'Free'
-  },
-  {
-    id: 'm2',
-    name: 'David Chen',
-    role: 'AI Research Scientist',
-    company: 'OpenAI',
-    avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
-    rating: 5.0,
-    reviews: 89,
-    skills: ['Machine Learning', 'Python', 'Interview Prep'],
-    availability: 'Next available: Thursday',
-    price: '₹4,000/hr'
-  },
-  {
-    id: 'm3',
-    name: 'Elena Rodriguez',
-    role: 'Engineering Manager',
-    company: 'Stripe',
-    avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
-    rating: 4.8,
-    reviews: 210,
-    skills: ['Leadership', 'Resume Review', 'Negotiation'],
-    availability: 'Next available: Today',
-    price: 'Free'
-  },
-  {
-    id: 'm4',
-    name: 'James Wilson',
-    role: 'Principal Frontend Dev',
-    company: 'Vercel',
-    avatar: 'https://randomuser.me/api/portraits/men/47.jpg',
-    rating: 4.9,
-    reviews: 156,
-    skills: ['Next.js', 'TypeScript', 'Portfolio Review'],
-    availability: 'Next available: Next Week',
-    price: '₹3,000/hr'
-  }
-];
+import { MOCK_MENTORS } from '../../utils/mockData';
 
 export default function MentorshipPage() {
   const [selectedMentor, setSelectedMentor] = useState<any>(null);
   const [isBooking, setIsBooking] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleBook = (e: React.FormEvent) => {
+  const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsBooking(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    // Extract form data
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const datetime = formData.get('datetime') as string;
+    const topic = formData.get('topic') as string;
+
+    try {
+      await fetch('http://localhost:5000/api/admin/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mentorId: selectedMentor.id,
+          mentorName: selectedMentor.name,
+          email,
+          datetime,
+          topic,
+          price: selectedMentor.price
+        })
+      });
+      
       setIsBooking(false);
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
         setSelectedMentor(null);
       }, 2000);
-    }, 1500);
+    } catch (err) {
+      console.error(err);
+      setIsBooking(false);
+    }
   };
 
   return (
@@ -201,9 +174,20 @@ export default function MentorshipPage() {
 
                       <div className="space-y-5">
                         <div>
+                          <label className="block text-sm font-bold text-theme-text mb-2">Email Address</label>
+                          <input 
+                            type="email" 
+                            name="email"
+                            placeholder="your.email@example.com"
+                            className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent transition"
+                            required
+                          />
+                        </div>
+                        <div>
                           <label className="block text-sm font-bold text-theme-text mb-2">Select Date & Time</label>
                           <input 
                             type="datetime-local" 
+                            name="datetime"
                             className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent transition"
                             required
                           />
@@ -212,6 +196,7 @@ export default function MentorshipPage() {
                           <label className="block text-sm font-bold text-theme-text mb-2">What do you want to discuss?</label>
                           <textarea 
                             rows={3}
+                            name="topic"
                             placeholder="e.g. Resume review, system design prep..."
                             className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent transition resize-none"
                             required

@@ -52,4 +52,61 @@ router.get('/stats', auth, isAdmin, async (req, res) => {
   }
 });
 
+// POST mentorship booking (open endpoint for demo)
+router.post('/bookings', async (req, res) => {
+  try {
+    const booking = { id: Date.now().toString(), ...req.body, createdAt: new Date() };
+    if (global.useMockDb) {
+      mockStore.mentorshipBookings.push(booking);
+      return res.status(201).json(booking);
+    }
+    res.status(201).json(booking);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET mentorship bookings
+router.get('/bookings', async (req, res) => {
+  try {
+    if (global.useMockDb) {
+      return res.json(mockStore.mentorshipBookings);
+    }
+    res.json([]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST gig application (open endpoint for demo)
+router.post('/applications', async (req, res) => {
+  try {
+    const application = { id: Date.now().toString(), ...req.body, createdAt: new Date() };
+    if (global.useMockDb) {
+      mockStore.gigApplications.push(application);
+      return res.status(201).json(application);
+    }
+    res.status(201).json(application);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET job applications
+router.get('/applications', auth, isAdmin, async (req, res) => {
+  try {
+    if (global.useMockDb) {
+      return res.json(mockStore.applications || mockStore.gigApplications);
+    }
+    const Application = require('../models/Application');
+    const applications = await Application.find()
+      .populate('jobId', 'title company location')
+      .populate('applicantId', 'name email profile')
+      .sort({ createdAt: -1 });
+    res.json(applications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

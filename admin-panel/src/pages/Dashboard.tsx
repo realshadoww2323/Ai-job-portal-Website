@@ -43,6 +43,8 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = React.useState('dashboard');
   const [users, setUsers] = React.useState<any[]>([]);
   const [jobs, setJobs] = React.useState<any[]>([]);
+  const [bookings, setBookings] = React.useState<any[]>([]);
+  const [applications, setApplications] = React.useState<any[]>([]);
   const [stats, setStats] = React.useState<any>({
     totalUsers: 0,
     totalJobs: 0,
@@ -68,10 +70,12 @@ export default function AdminDashboard() {
           headers: { 'x-auth-token': token }
         };
 
-        const [usersRes, statsRes, jobsRes] = await Promise.all([
+        const [usersRes, statsRes, jobsRes, bookingsRes, applicationsRes] = await Promise.all([
           axios.get('/api/admin/users', config),
           axios.get('/api/admin/stats', config),
-          axios.get('/api/jobs')
+          axios.get('/api/jobs'),
+          axios.get('/api/admin/bookings', config).catch(() => ({ data: [] })),
+          axios.get('/api/admin/applications', config).catch(() => ({ data: [] }))
         ]);
 
         if (usersRes.data) {
@@ -82,6 +86,12 @@ export default function AdminDashboard() {
         }
         if (jobsRes.data) {
           setJobs(jobsRes.data);
+        }
+        if (bookingsRes.data) {
+          setBookings(bookingsRes.data);
+        }
+        if (applicationsRes.data) {
+          setApplications(applicationsRes.data);
         }
       } catch (error) {
         console.error('Failed to fetch real-time admin data:', error);
@@ -102,6 +112,9 @@ export default function AdminDashboard() {
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
     { id: 'users', label: 'User Management', icon: Users },
     { id: 'projects', label: 'Projects / Records', icon: Database },
+    { id: 'bookings', label: 'Session Bookings', icon: Activity },
+    { id: 'applications', label: 'Job Applications', icon: Briefcase },
+    { id: 'interviews', label: 'Interview Attendees', icon: CheckCircle },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
@@ -351,6 +364,127 @@ export default function AdminDashboard() {
                     <div className="col-span-3 text-center py-12 text-slate-500">No project records available in the database.</div>
                   )}
                 </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Bookings Tab */}
+          {activeTab === 'bookings' && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-7xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-slate-200 dark:border-slate-800">
+                <h2 className="text-2xl font-black">Mentorship Session Bookings</h2>
+                <p className="text-slate-500 text-sm mt-1">Live feed of all mentorship sessions booked across the platform.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Mentor Details</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">User Contact</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Schedule</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Discussion Topic</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking, idx) => (
+                      <tr key={idx} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="px-8 py-5">
+                           <p className="font-bold text-slate-900 dark:text-white">{booking.mentorName}</p>
+                           <p className="text-xs text-slate-500">{booking.price}</p>
+                        </td>
+                        <td className="px-8 py-5 text-slate-600 dark:text-slate-300">{booking.email}</td>
+                        <td className="px-8 py-5 text-slate-500">{new Date(booking.datetime).toLocaleString()}</td>
+                        <td className="px-8 py-5 text-sm text-slate-500 max-w-xs truncate">{booking.topic}</td>
+                      </tr>
+                    ))}
+                    {bookings.length === 0 && !loading && (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-slate-500">No mentorship bookings found.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Applications Tab */}
+          {activeTab === 'applications' && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-7xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-slate-200 dark:border-slate-800">
+                <h2 className="text-2xl font-black">Job Applications</h2>
+                <p className="text-slate-500 text-sm mt-1">Live feed of all applications submitted for jobs and projects.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Job Details</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Applicant</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Status</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Match Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map((app, idx) => (
+                      <tr key={idx} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="px-8 py-5">
+                          <p className="font-bold text-slate-900 dark:text-white">{app.jobId?.title || app.gigTitle}</p>
+                          <p className="text-xs text-slate-500">{app.jobId?.company || app.gigCompany || 'Company'}</p>
+                        </td>
+                        <td className="px-8 py-5 text-slate-600 dark:text-slate-300">
+                          <p className="font-bold text-slate-900 dark:text-white">{app.applicantId?.name || 'Applicant'}</p>
+                          <p className="text-xs text-slate-500">{app.applicantId?.email || 'N/A'}</p>
+                        </td>
+                        <td className="px-8 py-5 font-medium text-emerald-500 capitalize">{app.status || 'Applied'}</td>
+                        <td className="px-8 py-5 text-sm text-slate-500 max-w-xs truncate">{app.aiMatchScore ? `${app.aiMatchScore}%` : 'N/A'}</td>
+                      </tr>
+                    ))}
+                    {applications.length === 0 && !loading && (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-slate-500">No job applications found.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Interviews Tab */}
+          {activeTab === 'interviews' && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-7xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-slate-200 dark:border-slate-800">
+                <h2 className="text-2xl font-black">Interview Attendees</h2>
+                <p className="text-slate-500 text-sm mt-1">Live feed of all users who have attended interviews.</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">User Details</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Interview Date</th>
+                      <th className="px-8 py-5 text-xs font-black text-slate-500 uppercase tracking-widest">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.filter((user) => user.interviewStatus?.attended).map((user, idx) => (
+                      <tr key={idx} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="px-8 py-5">
+                          <p className="font-bold text-slate-900 dark:text-white">{user.name || 'Anonymous User'}</p>
+                          <p className="text-xs text-slate-500">{user.email}</p>
+                        </td>
+                        <td className="px-8 py-5 text-slate-600 dark:text-slate-300">{user.interviewStatus?.lastAttendedAt ? new Date(user.interviewStatus.lastAttendedAt).toLocaleString() : 'N/A'}</td>
+                        <td className="px-8 py-5 font-medium text-emerald-500">{user.interviewStatus?.score || 'N/A'}</td>
+                      </tr>
+                    ))}
+                    {users.filter((user) => user.interviewStatus?.attended).length === 0 && !loading && (
+                      <tr>
+                        <td colSpan={3} className="p-8 text-center text-slate-500">No users have attended interviews yet.</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </motion.div>
           )}

@@ -4,74 +4,47 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, DollarSign, Clock, Search, Filter, Briefcase, ExternalLink, ShieldCheck, X, CheckCircle } from 'lucide-react';
 
-const MOCK_GIGS = [
-  {
-    id: 'g1',
-    title: 'Build a Next.js Landing Page',
-    company: 'TechStart Inc.',
-    budget: '₹40,000 - ₹65,000',
-    duration: '1-2 Weeks',
-    type: 'Fixed Price',
-    skills: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
-    description: 'Looking for a frontend developer to build a responsive, high-performance landing page based on our Figma designs.',
-    posted: '2 hours ago',
-    verified: true
-  },
-  {
-    id: 'g2',
-    title: 'Optimize Postgres Database Queries',
-    company: 'DataFlow Solutions',
-    budget: '₹8,000/hr',
-    duration: 'Ongoing (10hrs/wk)',
-    type: 'Hourly',
-    skills: ['PostgreSQL', 'SQL', 'Performance Optimization'],
-    description: 'We need a database expert to analyze our slow queries and add proper indexing. Long-term contract possible.',
-    posted: '5 hours ago',
-    verified: true
-  },
-  {
-    id: 'g3',
-    title: 'Create Python Script for Data Scraping',
-    company: 'Market Research LLC',
-    budget: '₹15,000',
-    duration: '3 Days',
-    type: 'Bounty',
-    skills: ['Python', 'BeautifulSoup', 'Requests'],
-    description: 'Simple script needed to scrape real estate listings from a public directory. Must output to CSV format.',
-    posted: '1 day ago',
-    verified: false
-  },
-  {
-    id: 'g4',
-    title: 'Figma to React Component Library',
-    company: 'Creative Agency',
-    budget: '₹95,000',
-    duration: '3 Weeks',
-    type: 'Fixed Price',
-    skills: ['React', 'TypeScript', 'Storybook'],
-    description: 'Convert our updated design system into a reusable React component library with full Storybook documentation.',
-    posted: '2 days ago',
-    verified: true
-  }
-];
+import { MOCK_GIGS } from '../../utils/mockData';
 
 export default function FreelancePage() {
   const [selectedGig, setSelectedGig] = useState<any>(null);
   const [isApplying, setIsApplying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleApply = (e: React.FormEvent) => {
+  const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsApplying(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    // Extract form data
+    const formData = new FormData(e.target as HTMLFormElement);
+    const rate = formData.get('rate') as string;
+    const timeline = formData.get('timeline') as string;
+    const proposal = formData.get('proposal') as string;
+
+    try {
+      await fetch('http://localhost:5000/api/admin/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gigId: selectedGig.id,
+          gigTitle: selectedGig.title,
+          gigCompany: selectedGig.company,
+          rate,
+          timeline,
+          proposal
+        })
+      });
+      
       setIsApplying(false);
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
         setSelectedGig(null);
       }, 2000);
-    }, 1500);
+    } catch (err) {
+      console.error(err);
+      setIsApplying(false);
+    }
   };
 
   return (
@@ -225,6 +198,7 @@ export default function FreelancePage() {
                           <label className="block text-sm font-bold text-theme-text mb-2">Your Proposed Rate (₹)</label>
                           <input 
                             type="text" 
+                            name="rate"
                             placeholder={selectedGig.budget}
                             className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent-sec transition"
                             required
@@ -234,6 +208,7 @@ export default function FreelancePage() {
                           <label className="block text-sm font-bold text-theme-text mb-2">Estimated Timeline</label>
                           <input 
                             type="text" 
+                            name="timeline"
                             placeholder={selectedGig.duration}
                             className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent-sec transition"
                             required
@@ -243,6 +218,7 @@ export default function FreelancePage() {
                           <label className="block text-sm font-bold text-theme-text mb-2">Cover Letter / Proposal</label>
                           <textarea 
                             rows={4}
+                            name="proposal"
                             placeholder="Why are you a great fit for this gig?"
                             className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl outline-none font-medium text-theme-text focus:border-theme-accent-sec transition resize-none"
                             required

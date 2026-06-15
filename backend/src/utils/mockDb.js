@@ -573,6 +573,8 @@ const mockStore = {
   jobs: generateJobs(1005),
   courses: generateCourses(525),
   applications: [],
+  mentorshipBookings: [],
+  gigApplications: [],
   codes: [
     { _id: '1', code: 'AIPORTAL50', discount: '50%', type: 'Job Posting', status: 'active', expiry: '2026-12-31' },
     { _id: '2', code: 'FREEJOB', discount: '100%', type: 'Job Posting', status: 'active', expiry: '2026-06-30' },

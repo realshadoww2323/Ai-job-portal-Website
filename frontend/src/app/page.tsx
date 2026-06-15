@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Briefcase, Zap, ShieldCheck, TrendingUp, Globe, ArrowRight, Mail } from 'lucide-react';
+import { Search, MapPin, Briefcase, Zap, ShieldCheck, TrendingUp, Globe, ArrowRight, Mail, Award, CheckCircle, Users } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -81,14 +81,7 @@ export default function LandingPage() {
               </Link>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="mt-8 flex items-center gap-4 text-sm font-bold text-theme-text-muted uppercase tracking-widest">
-              <span>Popular:</span>
-              <div className="flex gap-3">
-                {['Remote', 'Product', 'Design'].map(tag => (
-                  <span key={tag} className="text-theme-text hover:text-theme-accent cursor-pointer transition">{tag}</span>
-                ))}
-              </div>
-            </motion.div>
+
           </motion.div>
 
           {/* Hero Illustration / Dashboard Preview */}
@@ -133,24 +126,106 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-theme-card border-y border-theme-border text-theme-text">
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+      {/* Student Success Stories Section */}
+      <section className="py-24 bg-theme-bg relative overflow-hidden border-t border-theme-border">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-8 mb-16 text-center relative z-10">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-5xl font-black text-theme-text tracking-tight mb-6"
+          >
+            Our Students Are <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Getting Hired</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-theme-text-muted text-xl font-medium max-w-2xl mx-auto"
+          >
+            Join thousands of candidates who landed jobs through our AI-powered career platform.
+          </motion.p>
+        </div>
+
+        {/* Carousel */}
+        <div className="relative w-full flex overflow-x-hidden mb-24 group py-8">
+          <motion.div 
+            className="flex gap-8 px-4 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+          >
+            {[
+              { name: "Arjun Sharma", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Google", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.google.com&size=128", salary: "₹25 LPA" },
+              { name: "Rahul Verma", photo: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Microsoft", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.microsoft.com&size=128", salary: "₹18 LPA" },
+              { name: "Aditya Patel", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Amazon", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.amazon.in&size=128", salary: "₹22 LPA" },
+              { name: "Karan Singh", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "TCS", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tcs.com&size=128", salary: "₹8 LPA" },
+              { name: "Rohan Gupta", photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Infosys", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.infosys.com&size=128", salary: "₹12 LPA" },
+              { name: "Vikram Reddy", photo: "https://images.unsplash.com/photo-1555952517-2e8e729e0b44?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Flipkart", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.flipkart.com&size=128", salary: "₹15 LPA" },
+              // Duplicate for infinite scroll
+              { name: "Arjun Sharma", photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Google", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.google.com&size=128", salary: "₹25 LPA" },
+              { name: "Rahul Verma", photo: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Microsoft", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.microsoft.com&size=128", salary: "₹18 LPA" },
+              { name: "Aditya Patel", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Amazon", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.amazon.in&size=128", salary: "₹22 LPA" },
+              { name: "Karan Singh", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "TCS", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tcs.com&size=128", salary: "₹8 LPA" },
+              { name: "Rohan Gupta", photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Infosys", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.infosys.com&size=128", salary: "₹12 LPA" },
+              { name: "Vikram Reddy", photo: "https://images.unsplash.com/photo-1555952517-2e8e729e0b44?auto=format&fit=crop&crop=faces&q=80&w=200&h=200", company: "Flipkart", logo: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.flipkart.com&size=128", salary: "₹15 LPA" }
+            ].map((student, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="w-80 flex-shrink-0 bg-theme-card/80 backdrop-blur-xl border border-theme-border rounded-[2rem] p-6 shadow-xl shadow-theme-accent/5 flex flex-col gap-4 relative overflow-hidden"
+              >
+                {/* Placed Badge */}
+                <div className="absolute top-4 right-4 bg-green-500/10 text-green-500 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-green-500/20">
+                  <CheckCircle size={12} /> Placed
+                </div>
+
+                <div className="flex items-center gap-4 mt-2">
+                  <img src={student.photo} alt={student.name} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
+                  <div>
+                    <h3 className="text-lg font-black text-theme-text">{student.name}</h3>
+                    <p className="text-theme-text-muted text-sm font-bold">{student.salary}</p>
+                  </div>
+                </div>
+
+                <div className="w-full h-px bg-theme-border my-2" />
+
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-2 shadow-sm border border-gray-100">
+                    <img src={student.logo} alt={student.company} className="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-theme-text-muted font-medium">Hired by</p>
+                    <p className="text-sm font-black text-theme-text">{student.company}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Animated Counters */}
+        <div className="max-w-7xl mx-auto px-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center relative z-10">
           {[
-            { label: 'Active Jobs', value: '10K+', icon: Briefcase },
-            { label: 'Top Companies', value: '500+', icon: Globe },
-            { label: 'AI Matches', value: '1M+', icon: Zap },
-            { label: 'Success Rate', value: '98%', icon: TrendingUp },
+            { label: 'Students Placed', value: '5000+', icon: Users, color: 'text-blue-500' },
+            { label: 'Hiring Companies', value: '300+', icon: Briefcase, color: 'text-purple-500' },
+            { label: 'Highest Package', value: '₹25 LPA', icon: Award, color: 'text-yellow-500' },
+            { label: 'Success Rate', value: '95%', icon: TrendingUp, color: 'text-green-500' },
           ].map((stat, i) => (
             <motion.div 
               key={i}
               whileInView={{ opacity: 1, y: 0 }}
               initial={{ opacity: 0, y: 20 }}
               viewport={{ once: true }}
-              className="space-y-2"
+              transition={{ delay: i * 0.1 }}
+              className="bg-theme-card/50 backdrop-blur-sm border border-theme-border p-6 rounded-3xl shadow-lg shadow-theme-accent/5"
             >
-              <stat.icon className="mx-auto text-theme-accent mb-4" size={32} />
-              <p className="text-4xl font-black">{stat.value}</p>
+              <stat.icon className={`mx-auto ${stat.color} mb-4`} size={36} />
+              <p className="text-3xl md:text-4xl font-black text-theme-text mb-2">{stat.value}</p>
               <p className="text-xs font-bold text-theme-text-muted uppercase tracking-widest">{stat.label}</p>
             </motion.div>
           ))}
