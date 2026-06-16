@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Briefcase, Zap, ShieldCheck, TrendingUp, Globe, ArrowRight, Mail, Award, CheckCircle, Users } from 'lucide-react';
+import PlacementSuccess from '../components/PlacementSuccess';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -208,29 +209,9 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
-        {/* Animated Counters */}
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center relative z-10">
-          {[
-            { label: 'Students Placed', value: '5000+', icon: Users, color: 'text-blue-500' },
-            { label: 'Hiring Companies', value: '300+', icon: Briefcase, color: 'text-purple-500' },
-            { label: 'Highest Package', value: '₹25 LPA', icon: Award, color: 'text-yellow-500' },
-            { label: 'Success Rate', value: '95%', icon: TrendingUp, color: 'text-green-500' },
-          ].map((stat, i) => (
-            <motion.div 
-              key={i}
-              whileInView={{ opacity: 1, y: 0 }}
-              initial={{ opacity: 0, y: 20 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-theme-card/50 backdrop-blur-sm border border-theme-border p-6 rounded-3xl shadow-lg shadow-theme-accent/5"
-            >
-              <stat.icon className={`mx-auto ${stat.color} mb-4`} size={36} />
-              <p className="text-3xl md:text-4xl font-black text-theme-text mb-2">{stat.value}</p>
-              <p className="text-xs font-bold text-theme-text-muted uppercase tracking-widest">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
       </section>
+
+      <PlacementSuccess />
 
       {/* Features Section */}
       <section className="py-32 px-8 bg-theme-bg">
